@@ -4,7 +4,7 @@
     <div class="app-config-list flex flex-column">
       <div class="list-wrapper flex-1">
         <ul>
-          <li v-for="(c,i) in configs" @click="selectedIndex=i" :class="{selected:selectedIndex===i}">
+          <li v-for="(c,i) in configs" :key="i" @click="selectedIndex=i" :class="{selected:selectedIndex===i}">
             {{c.remark||c.host}}（{{c.host}}:{{c.port}}）
           </li>
         </ul>
@@ -25,12 +25,12 @@
         <form-item label="* 服务器端口">
           <input type="number" v-model="tempConfig.port">
         </form-item>
-        <form-item label="本机代理IP">
+        <!-- <form-item label="本机代理IP">
           <input type="text" v-model="tempConfig.localAddr">
         </form-item>
         <form-item label="本机代理端口">
           <input type="number" v-model="tempConfig.localPort">
-        </form-item>
+        </form-item> -->
         <form-item>
           <span slot="label">
             <input type="checkbox" v-model="showPassword">* 密码
@@ -40,17 +40,17 @@
         </form-item>
         <form-item label="* 加密">
           <select v-model="tempConfig.method">
-            <option v-for="method in config.methods" :value="method">{{method}}</option>
+            <option v-for="method in config.methods" :key="method" :value="method">{{method}}</option>
           </select>
         </form-item>
         <form-item label="* 协议" warning>
           <select v-model="tempConfig.protocol">
-            <option v-for="protocol in config.protocols" :value="protocol">{{protocol}}</option>
+            <option v-for="protocol in config.protocols" :key="protocol" :value="protocol">{{protocol}}</option>
           </select>
         </form-item>
         <form-item label="* 混淆" warning>
           <select v-model="tempConfig.obfs" @change="tempConfig.obfsparam=''">
-            <option v-for="obfs in config.obfses" :value="obfs">{{obfs}}</option>
+            <option v-for="obfs in config.obfses" :key="obfs" :value="obfs">{{obfs}}</option>
           </select>
         </form-item>
         <form-item label="混淆参数" warning>

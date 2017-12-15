@@ -63,7 +63,7 @@ export default {
       }
     },
     toDownload () {
-      shell.openExternal('https://github.com/shadowsocksr/shadowsocksr', false)
+      shell.openExternal('https://github.com/shadowsocksr-backup/shadowsocksr/tree/dev', false)
     }
   }
 }

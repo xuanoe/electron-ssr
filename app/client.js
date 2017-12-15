@@ -42,19 +42,19 @@ module.exports.stop = function () {
   }
 }
 
-module.exports.run = function (enable, config) {
+module.exports.run = function (enable, config, localPort = 1080) {
   // stop preview
   module.exports.stop()
   if (enable) {
     const params = []
     params.push(`-s ${config.host}`)
     params.push(`-p ${config.port}`)
-    params.push(`-b ${config.localAddr}`)
-    params.push(`-l ${config.localPort}`)
     params.push(`-k ${config.password}`)
     params.push(`-m ${config.method}`)
-    params.push(`-O ${config.protocol}`)
     config.obfs && params.push(`-o ${config.obfs}`)
+    params.push(`-O ${config.protocol}`)
+    // params.push(`-b ${config.localAddr}`)
+    params.push(`-l ${localPort}`)
     const command = `python ${localPyPath} ${params.join(' ')}`
     console.log(command)
     child = execCmd(command)

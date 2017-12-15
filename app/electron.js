@@ -1,13 +1,13 @@
 'use strict'
 
-const { app, BrowserWindow, ipcMain, net, shell } = require('electron')
+const { app, BrowserWindow, ipcMain, net, shell, clipboard, crashReporter, dialog } = require('electron')
 const AutoLaunch = require('auto-launch')
-const { crashReporter } = require('electron')
 const path = require('path')
 const fsExtra = require('fs-extra')
 const tray = require('./tray.js')
 const client = require('./client.js')
 const storage = require('./storage.js')
+const { merge } = require('vtc')
 
 const AutoLauncher = new AutoLaunch({
   name: 'ShadowsocksR Client',
@@ -110,8 +110,8 @@ app.on('ready', () => {
   if (storedConfig.pyPath) {
     client.setup(storedConfig.pyPath)
     // if enable then start
-    if (storedConfig.enable && storedConfig.configs[storedConfig.selected]) {
-      client.run(storedConfig.enable, storedConfig.configs[storedConfig.selected])
+    if (storedConfig.enable && storedConfig.configs[storedConfig.index]) {
+      client.run(storedConfig.enable, storedConfig.configs[storedConfig.index], storedConfig.localPort)
     }
   }
   // create main window
@@ -122,10 +122,10 @@ app.on('ready', () => {
   trayEvent.on('change-enable', (enable) => {
     storedConfig.enable = enable
     storage.saveConfig()
-    const selectedConfigIndex = tray.getMenuConfig().selected
+    const selectedConfigIndex = tray.getMenuConfig().index
     if (selectedConfigIndex > -1) {
       // exec python command
-      client.run(enable, storedConfig.configs[selectedConfigIndex])
+      client.run(enable, storedConfig.configs[selectedConfigIndex], storedConfig.localPort)
     }
     if (!enable) {
       client.stop()
@@ -141,11 +141,29 @@ app.on('ready', () => {
   }).on('qr-scan', () => {
     mainWindow.webContents.send('take-screencapture')
   }).on('change-selected', (index) => {
-    storedConfig.selected = index
+    storedConfig.index = index
     storage.saveConfig()
     if (index > -1) {
-      client.run(storedConfig.enable, storedConfig.configs[index])
+      client.run(storedConfig.enable, storedConfig.configs[index], storedConfig.localPort)
     }
+  }).on('load-config', () => {
+    const configPath = dialog.showOpenDialog({ title: '请选择gui-config.json文件', properties: [ 'openFile' ], filters: [{ name: 'Json', extensions: ['json'] }] })
+    fsExtra.readJSON(configPath).then(data => {
+      merge(storedConfig, data)
+      storage.saveConfig()
+      tray.refreshConfigs(storedConfig.configs, storedConfig.index)
+    }).catch(e => {
+      console.error('Error when load config', e)
+    })
+  }).on('export-config', () => {
+
+  }).on('load-clipboard', () => {
+    // 读取剪切板内容
+    const content = clipboard.readText()
+    const arr = content.split(/[\n ]/)
+    Array.prototype.push.apply(storedConfig.configs, arr)
+    storage.saveConfig()
+    tray.refreshConfigs(storedConfig.configs, storedConfig.index)
   }).on('exit', quitHandler).on('open', showWindow).on('open-config', () => {
     if (!shell.openItem(storage.getConfigPath())) {
       console.error('Error to open config file.')
@@ -203,14 +221,14 @@ ipcMain.on('resize', (e, width, height) => {
   storedConfig[field] = value
   if (field === 'configs') {
     // refresh tray menu list
-    tray.refreshConfigs(storedConfig.configs, storedConfig.selected)
+    tray.refreshConfigs(storedConfig.configs, storedConfig.index)
     if (value.length) {
-      if (storedConfig.selected < 0) {
-        storedConfig.selected = value.length - 1
+      if (storedConfig.index < 0) {
+        storedConfig.index = value.length - 1
       }
-      client.run(storedConfig.enable, value[storedConfig.selected])
+      client.run(storedConfig.enable, value[storedConfig.index], storedConfig.localPort)
     } else {
-      storedConfig.selected = -1
+      storedConfig.index = -1
       storedConfig.enable = false
       client.stop()
     }
@@ -221,7 +239,7 @@ ipcMain.on('resize', (e, width, height) => {
 }).on('scaned-config', (e, newConfig) => {
   storedConfig.configs.push(newConfig)
   storage.saveConfig()
-  tray.refreshConfigs(storedConfig.configs, storedConfig.selected)
+  tray.refreshConfigs(storedConfig.configs, storedConfig.index)
 }).on('open-window', () => {
   mainWindow.show()
 }).on('hide-window', () => {

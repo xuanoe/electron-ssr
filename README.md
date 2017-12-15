@@ -19,6 +19,15 @@ English document [here](./README.en.md)
 请前往 [release](https://github.com/erguotou520/electron-ssr/releases) 下载
 
 ## 更新历史
+- 0.1.3
+  * 添加导入和导出`gui-config.json`文件的功能
+  * 添加从粘贴板批量导入`ssr://`地址的功能
+  * 其它部分菜单内容调整
+  * 修复Linux系统上第二次打开后无法显示图标的问题 [#51](https://github.com/erguotou520/electron-ssr/issues/51)
+  * 修复无法切换服务器配置的问题 [#52](https://github.com/erguotou520/electron-ssr/issues/52)
+  * release版本中添加`deb`的支持
+- 0.1.2
+  * 修复二维码扫描的一个bug
 - 0.1.1
   * 统一使用`child_process`运行`python`命令，linux系统下`-d`模式需要`root`权限
   * 修改一些配置文件代码的逻辑问题
@@ -65,3 +74,6 @@ npm run test:unit
 ## ShadowsocksR 参考文档
 - [Python client setup (Mult language)](https://github.com/breakwa11/shadowsocks-rss/wiki/Python-client-setup-(Mult-language))
 - [SSR QRcode scheme](https://github.com/breakwa11/shadowsocks-rss/wiki/SSR-QRcode-scheme)
+
+## 捐赠
+[如果觉得项目还不错，或者对你有帮助，可以选择捐赠作者](https://github.com/erguotou520/donate)

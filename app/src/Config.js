@@ -21,8 +21,9 @@ module.exports = class Config {
     this.obfs = 'plain'
     this.obfsparam = ''
     this.remark = ''
-    this.localAddr = '127.0.0.1'
-    this.localPort = '1080'
+    this.group = ''
+    // this.localAddr = '127.0.0.1'
+    // this.localPort = '1080'
     // this.udpport = false
     // this.uot = false
     Object.assign(this, config)
@@ -37,6 +38,7 @@ module.exports = class Config {
     const others = []
     this.obfsparam && others.push(`obfsparam=${encode(this.obfsparam)}`)
     this.remark && others.push(`remarks=${encode(this.remark)}`)
+    this.group && others.push(`group=${encode(this.group)}`)
     // this.udpport && others.push(`udpport=${this.udpport}`)
     // this.uot && others.push(`uot=${this.uot}`)
     const link = 'ssr://' + encode(required.join(':') + '/?' + others.join('&'))
@@ -68,6 +70,9 @@ module.exports = class Config {
         }
         if (otherSplit.remarks) {
           this.remark = decode(otherSplit.remarks)
+        }
+        if (otherSplit.group) {
+          this.group = decode(otherSplit.group)
         }
         // this.udpport = otherSplit.udpport
         // this.uot = otherSplit.uot

@@ -86,7 +86,7 @@ function build () {
         },
         linux: {
           category: 'Development',
-          target: ['rpm', 'tar.gz']
+          target: ['deb', 'rpm', 'tar.gz']
         },
         publish: [{
           provider: 'github'

@@ -66,3 +66,6 @@ npm run test:unit
 ## ShadowsocksR Doc Reference
 - [Python client setup (Mult language)](https://github.com/breakwa11/shadowsocks-rss/wiki/Python-client-setup-(Mult-language))
 - [SSR QRcode scheme](https://github.com/breakwa11/shadowsocks-rss/wiki/SSR-QRcode-scheme)
+
+## Donate
+[Buy me a coffee if you like this project](https://github.com/erguotou520/donate)
