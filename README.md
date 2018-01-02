@@ -2,6 +2,9 @@
 使用`electron`和`vue`开发的跨平台`shadowsocksr`客户端
 English document [here](./README.en.md)
 
+## Telegram交流
+[![](https://img.shields.io/badge/Telegram-electron--ssr-blue.svg)](https://t.me/electron_ssr)
+
 ## 功能
 - 跨平台功能支持
 - 支持python版`shadowsocksr`的所有功能
@@ -17,6 +20,9 @@ English document [here](./README.en.md)
 
 ## 下载
 请前往 [release](https://github.com/erguotou520/electron-ssr/releases) 下载
+
+## 打赏
+[如果觉得本项目对你有所帮助，欢迎打赏](https://github.com/erguotou520/donate)
 
 ## 更新历史
 - 0.1.1
